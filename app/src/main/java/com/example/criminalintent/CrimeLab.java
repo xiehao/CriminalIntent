@@ -16,6 +16,7 @@ public class CrimeLab {
             Crime crime = new Crime();
             crime.setTitle("陋习编号" + i);
             crime.setSolved(0 == i % 2);
+            crime.setPoliceRequired(0 == i % 3);
             mCrimes.add(crime);
         }
     }

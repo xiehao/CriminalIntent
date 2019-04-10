@@ -38,28 +38,38 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView.setAdapter(mAdapter);
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder {
+    private abstract class AbstractCrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Crime mCrime;
 
-        private final TextView mTitleTextView;
-        private final TextView mDateTextView;
-        private Crime mCrime;
+        AbstractCrimeHolder(@NonNull View itemView) {
+            super(itemView);
+        }
 
-        CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
+        abstract void bind(Crime crime);
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(),
+                    "点击了" + mCrime.getTitle(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class NormalCrimeHolder extends AbstractCrimeHolder {
+
+        private TextView mTitleTextView;
+        private TextView mDateTextView;
+
+        NormalCrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
 
             mTitleTextView = itemView.findViewById(R.id.crime_title);
             mDateTextView = itemView.findViewById(R.id.crime_date);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getActivity(),
-                            "点击了" + mCrime.getTitle(),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+            itemView.setOnClickListener(this);
         }
 
+        @Override
         void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
@@ -67,23 +77,55 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
-    private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
+    private class SeriousCrimeHolder extends AbstractCrimeHolder {
+
+        private TextView mTitleTextView;
+        private TextView mDateTextView;
+
+        SeriousCrimeHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.list_item_crime_police_required, parent, false));
+
+            mTitleTextView = itemView.findViewById(R.id.crime_title);
+            mDateTextView = itemView.findViewById(R.id.crime_date);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        void bind(Crime crime) {
+            mCrime = crime;
+            mTitleTextView.setText(mCrime.getTitle());
+            mDateTextView.setText(mCrime.getDate().toString());
+        }
+    }
+
+    private class CrimeAdapter extends RecyclerView.Adapter<AbstractCrimeHolder> {
+        private static final int VIEW_TYPE_NORMAL = 0;
+        private static final int VIEW_TYPE_POLICE_REQUIRED = 1;
         private final List<Crime> mCrimes;
 
         CrimeAdapter(List<Crime> crimes) {
             mCrimes = crimes;
         }
 
+        @Override
+        public int getItemViewType(int position) {
+            Crime crime = mCrimes.get(position);
+            return crime.isPoliceRequired() ? VIEW_TYPE_POLICE_REQUIRED : VIEW_TYPE_NORMAL;
+        }
+
         @NonNull
         @Override
-        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public AbstractCrimeHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new CrimeHolder(inflater, viewGroup);
+            return (VIEW_TYPE_NORMAL == viewType) ?
+                    new NormalCrimeHolder(inflater, viewGroup)
+                    : new SeriousCrimeHolder(inflater, viewGroup);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull CrimeHolder crimeHolder, int i) {
-            Crime crime = mCrimes.get(i);
+        public void onBindViewHolder(@NonNull AbstractCrimeHolder crimeHolder, int position) {
+            Crime crime = mCrimes.get(position);
             crimeHolder.bind(crime);
         }
 
