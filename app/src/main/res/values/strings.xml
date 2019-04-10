@@ -4,4 +4,6 @@
     <string name="crime_title_hint">请输入标题</string>
     <string name="crime_details_label">详细信息</string>
     <string name="crime_solved_label">已解决</string>
+    <string name="crime_title">陋习标题</string>
+    <string name="crime_date">陋习日期</string>
 </resources>
