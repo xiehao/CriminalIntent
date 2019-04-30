@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
@@ -16,10 +15,9 @@
         android:id="@+id/crime_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="这是一个陋习标题"
+        android:autofillHints="这是一个标题"
         android:hint="@string/crime_title_hint"
-        android:inputType="text"
-        tools:ignore="UnusedAttribute" />
+        android:inputType="text" />
 
     <TextView
         style="?android:listSeparatorTextViewStyle"

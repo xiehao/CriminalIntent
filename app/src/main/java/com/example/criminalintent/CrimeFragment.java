@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,17 +15,31 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 public class CrimeFragment extends Fragment {
 
+    private static final String ARG_CRIME_ID = "crime_id";
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
+    private CheckBox mPoliceRequiredCheckBox;
+
+    public static Fragment newInstance(UUID id) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, id);
+        Fragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        assert getArguments() != null;
+        UUID id = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.getInstance(getActivity()).getCrime(id);
     }
 
     @Nullable
@@ -33,6 +48,7 @@ public class CrimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
 
         mTitleField = view.findViewById(R.id.crime_title);
+        mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -49,16 +65,32 @@ public class CrimeFragment extends Fragment {
 
             }
         });
-        
+
         mDateButton = view.findViewById(R.id.crime_date);
         mDateButton.setText(mCrime.getFormattedDate());
         mDateButton.setEnabled(false);
 
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+                mPoliceRequiredCheckBox.setEnabled(!isChecked);
+                if (isChecked) {
+                    mCrime.setPoliceRequired(false);
+                    mPoliceRequiredCheckBox.setChecked(false);
+                }
+            }
+        });
+
+        mPoliceRequiredCheckBox = view.findViewById(R.id.crime_police_required);
+        mPoliceRequiredCheckBox.setEnabled(!mCrime.isSolved());
+        mPoliceRequiredCheckBox.setChecked(mCrime.isPoliceRequired());
+        mPoliceRequiredCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                mCrime.setPoliceRequired(isChecked);
             }
         });
         return view;

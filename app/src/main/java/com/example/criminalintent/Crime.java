@@ -57,6 +57,6 @@ public class Crime {
     }
 
     void setPoliceRequired(boolean policeRequired) {
-        mPoliceRequired = policeRequired;
+        mPoliceRequired = !mSolved && policeRequired;
     }
 }
