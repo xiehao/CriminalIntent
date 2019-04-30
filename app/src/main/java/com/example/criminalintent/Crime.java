@@ -1,5 +1,6 @@
 package com.example.criminalintent;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,12 +11,12 @@ public class Crime {
     private boolean mSolved;
     private boolean mPoliceRequired;
 
-    public Crime() {
+    Crime() {
         mId = UUID.randomUUID();
         mDate = new Date();
     }
 
-    public UUID getId() {
+    UUID getId() {
         return mId;
     }
 
@@ -23,11 +24,11 @@ public class Crime {
         mId = id;
     }
 
-    public String getTitle() {
+    String getTitle() {
         return mTitle;
     }
 
-    public void setTitle(String title) {
+    void setTitle(String title) {
         mTitle = title;
     }
 
@@ -35,23 +36,27 @@ public class Crime {
         return mDate;
     }
 
+    String getFormattedDate() {
+        return DateFormat.getDateInstance(DateFormat.FULL).format(mDate);
+    }
+
     public void setDate(Date date) {
         mDate = date;
     }
 
-    public boolean isSolved() {
+    boolean isSolved() {
         return mSolved;
     }
 
-    public void setSolved(boolean solved) {
+    void setSolved(boolean solved) {
         mSolved = solved;
     }
 
-    public boolean isPoliceRequired() {
+    boolean isPoliceRequired() {
         return mPoliceRequired;
     }
 
-    public void setPoliceRequired(boolean policeRequired) {
+    void setPoliceRequired(boolean policeRequired) {
         mPoliceRequired = policeRequired;
     }
 }
