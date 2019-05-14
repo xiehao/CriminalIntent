@@ -88,7 +88,7 @@ public class CrimeListFragment extends Fragment {
         void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getFormattedDate());
+            mDateTextView.setText(mCrime.getFormattedDateTime());
             mSolvedImageView.setVisibility(mCrime.isSolved() ? View.VISIBLE : View.GONE);
         }
     }
@@ -111,7 +111,7 @@ public class CrimeListFragment extends Fragment {
         void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getFormattedDate());
+            mDateTextView.setText(mCrime.getFormattedDateTime());
         }
     }
 

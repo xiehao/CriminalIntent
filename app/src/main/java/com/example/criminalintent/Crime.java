@@ -32,7 +32,7 @@ public class Crime {
         mTitle = title;
     }
 
-    public Date getDate() {
+    Date getDate() {
         return mDate;
     }
 
@@ -40,7 +40,7 @@ public class Crime {
         return DateFormat.getDateInstance(DateFormat.FULL).format(mDate);
     }
 
-    public void setDate(Date date) {
+    void setDate(Date date) {
         mDate = date;
     }
 
@@ -58,5 +58,13 @@ public class Crime {
 
     void setPoliceRequired(boolean policeRequired) {
         mPoliceRequired = !mSolved && policeRequired;
+    }
+
+    String getFormattedTime() {
+        return DateFormat.getTimeInstance(DateFormat.MEDIUM).format(mDate);
+    }
+
+    String getFormattedDateTime() {
+        return DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.MEDIUM).format(mDate);
     }
 }
