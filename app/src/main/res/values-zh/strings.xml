@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">陋习意图</string>
+    <string name="crime_title_label">标题</string>
+    <string name="crime_title_hint">请输入标题</string>
+    <string name="crime_details_label">详细信息</string>
+    <string name="crime_solved_label">已解决</string>
+    <string name="crime_title">陋习标题</string>
+    <string name="crime_date">陋习日期</string>
+    <string name="crime_police_required_button">联系警方</string>
+    <string name="crime_police_required">须警方介入</string>
+    <string name="to_first_button">首项</string>
+    <string name="to_last_button">末项</string>
+    <string name="date_picker_title">陋习日期选择:</string>
+    <string name="time_picker_title">陋习时间选择：</string>
+    <string name="new_crime">新建陋习记录</string>
+    <string name="show_subtitle">显示子标题</string>
+    <string name="hide_subtitle">隐藏子标题</string>
+    <string name="subtitle_format">共%1$d条陋习记录</string>
+</resources>
