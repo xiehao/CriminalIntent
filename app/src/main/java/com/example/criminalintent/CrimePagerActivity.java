@@ -83,9 +83,11 @@ public class CrimePagerActivity extends AppCompatActivity {
             }
         });
         UUID id = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
-        int index = mCrimes.indexOf(CrimeLab.getInstance(this).getCrime(id));
-        if (index >= 0) {
-            mViewPager.setCurrentItem(index);
+        for (int i = 0; i < mCrimes.size(); ++i) {
+            if (mCrimes.get(i).getId().equals(id)) {
+                mViewPager.setCurrentItem(i);
+                break;
+            }
         }
     }
 }

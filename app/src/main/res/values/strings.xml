@@ -6,7 +6,7 @@
     <string name="crime_solved_label">Solved</string>
     <string name="crime_title">Crime Title</string>
     <string name="crime_date">Crime Date</string>
-    <string name="crime_police_required_button">Call the police</string>
+    <string name="crime_police_required_button">Call 911</string>
     <string name="crime_police_required">Police required</string>
     <string name="to_first_button">First</string>
     <string name="to_last_button">Last</string>
