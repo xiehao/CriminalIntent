@@ -18,4 +18,5 @@
     <string name="hide_subtitle">隐藏子标题</string>
     <string name="subtitle_format">共%1$d条陋习记录</string>
     <string name="delete_crime">删除陋习记录</string>
+    <string name="no_crime_hint">没有陋习记录可以显示</string>
 </resources>
