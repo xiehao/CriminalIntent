@@ -85,7 +85,7 @@ class CrimeLab {
         mDatabase.insert(CrimeTable.NAME, null, values);
     }
 
-    public void updateCrime(Crime crime) {
+    void updateCrime(Crime crime) {
         String uuidString = crime.getId().toString();
         ContentValues values = getContentValues(crime);
         mDatabase.update(CrimeTable.NAME, values,
@@ -114,5 +114,12 @@ class CrimeLab {
                 null
         );
         return new CrimeCursorWrapper(cursor);
+    }
+
+    void deleteCrime(Crime crime) {
+        String uuidString = crime.getId().toString();
+        mDatabase.delete(CrimeTable.NAME,
+                Columns.UUID + " = ?",
+                new String[]{uuidString});
     }
 }

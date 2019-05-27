@@ -11,6 +11,9 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -46,6 +50,8 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         assert getArguments() != null;
         UUID id = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.getInstance(getActivity()).getCrime(id);
@@ -130,6 +136,22 @@ public class CrimeFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_crime, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete_crime) {
+            CrimeLab.getInstance(getActivity()).deleteCrime(mCrime);
+            Objects.requireNonNull(getActivity()).finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
