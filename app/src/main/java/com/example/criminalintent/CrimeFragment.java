@@ -2,14 +2,18 @@ package com.example.criminalintent;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,12 +36,15 @@ public class CrimeFragment extends Fragment {
     private static final String DIALOG_TIME = "DialogTime";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
+    private static final int REQUEST_CONTACT = 2;
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private Button mTimeButton;
     private CheckBox mSolvedCheckBox;
     private CheckBox mPoliceRequiredCheckBox;
+    private Button mReportButton;
+    private Button mSuspectButton;
 
     public static Fragment newInstance(UUID id) {
         Bundle args = new Bundle();
@@ -135,7 +142,55 @@ public class CrimeFragment extends Fragment {
                 mCrime.setPoliceRequired(isChecked);
             }
         });
+
+        mReportButton = view.findViewById(R.id.crime_report);
+        mReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
+                intent = Intent.createChooser(intent, getString(R.string.send_report));
+                startActivity(intent);
+            }
+        });
+
+        mSuspectButton = view.findViewById(R.id.crime_suspect);
+        final Intent pickContact = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+//        pickContact.addCategory(Intent.CATEGORY_HOME);
+        mSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(pickContact, REQUEST_CONTACT);
+            }
+        });
+        if (null != mCrime.getSuspect()) {
+            mSuspectButton.setText(mCrime.getSuspect());
+        }
+
+        PackageManager manager = Objects.requireNonNull(getActivity()).getPackageManager();
+        if (null == manager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY)) {
+            mSuspectButton.setEnabled(false);
+        } else {
+            mSuspectButton.setEnabled(true);
+        }
+
         return view;
+    }
+
+    private String getCrimeReport() {
+        String dateFormat = "EEE, MMM dd";
+        String dateString = DateFormat.format(dateFormat, mCrime.getDate()).toString();
+        String solvedString = getString(mCrime.isSolved() ?
+                R.string.crime_report_solved : R.string.crime_report_unsolved);
+        String suspect = mCrime.getSuspect();
+        suspect = (null == suspect) ?
+                getString(R.string.crime_report_no_suspect) :
+                getString(R.string.crime_report_suspect, suspect);
+        return getString(R.string.crime_report,
+                mCrime.getTitle(), dateString, solvedString, suspect);
     }
 
     @Override
@@ -167,6 +222,22 @@ public class CrimeFragment extends Fragment {
             Date time = TimePickerFragment.getTime(data);
             mCrime.setDate(time);
             updateDate();
+        } else if (REQUEST_CONTACT == requestCode) {
+            Uri contactUri = data.getData();
+            String[] queryFields = new String[] {
+                    ContactsContract.Contacts.DISPLAY_NAME
+            };
+            assert contactUri != null;
+            try (Cursor cursor = Objects.requireNonNull(getActivity()).getContentResolver().query(
+                    contactUri, queryFields, null, null, null)) {
+                assert cursor != null;
+                if (0 != cursor.getCount()) {
+                    cursor.moveToFirst();
+                    String suspect = cursor.getString(0);
+                    mCrime.setSuspect(suspect);
+                    mSuspectButton.setText(suspect);
+                }
+            }
         }
     }
 

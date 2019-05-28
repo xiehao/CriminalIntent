@@ -4,16 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.transition.CircularPropagation;
 
 import com.example.criminalintent.database.CrimeBaseHelper;
 import com.example.criminalintent.database.CrimeCursorWrapper;
-import com.example.criminalintent.database.CrimeDbSchema;
 import com.example.criminalintent.database.CrimeDbSchema.CrimeTable;
 import com.example.criminalintent.database.CrimeDbSchema.CrimeTable.Columns;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,6 +97,7 @@ class CrimeLab {
         values.put(Columns.DATE, crime.getDate().getTime());
         values.put(Columns.SOLVED, crime.isSolved() ? 1 : 0);
         values.put(Columns.POLICE_REQUIRED, crime.isPoliceRequired() ? 1 : 0);
+        values.put(Columns.SUSPECT, crime.getSuspect());
         return values;
     }
 

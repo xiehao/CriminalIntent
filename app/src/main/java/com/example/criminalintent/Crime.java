@@ -10,8 +10,9 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
     private boolean mPoliceRequired;
+    private String mSuspect;
 
-    public Crime() {
+    Crime() {
         this(UUID.randomUUID());
     }
 
@@ -70,5 +71,13 @@ public class Crime {
 
     String getFormattedDateTime() {
         return DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.MEDIUM).format(mDate);
+    }
+
+    String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String mSuspect) {
+        this.mSuspect = mSuspect;
     }
 }

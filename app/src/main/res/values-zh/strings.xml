@@ -19,4 +19,13 @@
     <string name="subtitle_format">共%1$d条陋习记录</string>
     <string name="delete_crime">删除陋习记录</string>
     <string name="no_crime_hint">没有陋习记录可以显示</string>
+    <string name="crime_report">%1$s! 于%2$s发现该陋习。 %3$s且%4$s</string>
+    <string name="crime_report_no_suspect">无嫌疑人。</string>
+    <string name="crime_report_solved">案件已侦破</string>
+    <string name="crime_report_subject">陋习意图应用的陋习报告</string>
+    <string name="crime_report_suspect">嫌疑人是%1$s。</string>
+    <string name="crime_report_text">发送陋习报告</string>
+    <string name="crime_report_unsolved">案件尚未侦破</string>
+    <string name="crime_suspect">选择嫌疑人</string>
+    <string name="send_report">通过下述渠道发送陋习报告</string>
 </resources>
