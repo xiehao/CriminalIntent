@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mPoliceRequiredCheckBox;
     private Button mReportButton;
     private Button mSuspectButton;
+    private Button mCallSuspectButton;
 
     public static Fragment newInstance(UUID id) {
         Bundle args = new Bundle();
@@ -184,7 +186,25 @@ public class CrimeFragment extends Fragment {
             mSuspectButton.setEnabled(true);
         }
 
+        mCallSuspectButton = view.findViewById(R.id.crime_call_suspect);
+        mCallSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri phoneUri = Uri.parse("tel:" + mCrime.getPhoneNumber());
+                intent.setData(phoneUri);
+                intent = Intent.createChooser(intent, getString(R.string.crime_call_suspect));
+                startActivity(intent);
+            }
+        });
+        updateCallSuspectButton();
+
         return view;
+    }
+
+    private void updateCallSuspectButton() {
+        mCallSuspectButton.setText(getString(R.string.crime_call_suspect,
+                null != mCrime.getPhoneNumber() ? mCrime.getPhoneNumber() : getString(R.string.suspect)));
     }
 
     private String getCrimeReport() {
@@ -218,7 +238,7 @@ public class CrimeFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Activity.RESULT_OK != resultCode) {
+        if (Activity.RESULT_OK != resultCode && null == data) {
             return;
         }
         if (REQUEST_DATE == requestCode) {
@@ -232,8 +252,10 @@ public class CrimeFragment extends Fragment {
         } else if (REQUEST_CONTACT == requestCode) {
             Uri contactUri = data.getData();
             String[] queryFields = new String[]{
-                    ContactsContract.Contacts.DISPLAY_NAME
+                    ContactsContract.Contacts.DISPLAY_NAME,
+                    ContactsContract.Contacts._ID
             };
+            String suspectId = null;
             assert contactUri != null;
             try (Cursor cursor = Objects.requireNonNull(getActivity()).getContentResolver().query(
                     contactUri, queryFields, null, null, null)) {
@@ -243,6 +265,23 @@ public class CrimeFragment extends Fragment {
                     String suspect = cursor.getString(0);
                     mCrime.setSuspect(suspect);
                     mSuspectButton.setText(suspect);
+                    suspectId = cursor.getString(1);
+                }
+            }
+            if (null != suspectId) {
+                try (Cursor cursor = getActivity().getContentResolver().query(
+                        Phone.CONTENT_URI,
+                        null,
+                        Phone.CONTACT_ID + " = " + suspectId,
+                        null,
+                        null
+                )) {
+                    assert cursor != null;
+                    if (0 != cursor.getCount() && cursor.moveToFirst()) {
+                        String phoneNumber = cursor.getString(cursor.getColumnIndex(Phone.NUMBER));
+                        mCrime.setPhoneNumber(phoneNumber);
+                        updateCallSuspectButton();
+                    }
                 }
             }
         }

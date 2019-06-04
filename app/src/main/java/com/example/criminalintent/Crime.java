@@ -11,6 +11,7 @@ public class Crime {
     private boolean mSolved;
     private boolean mPoliceRequired;
     private String mSuspect;
+    private String mPhoneNumber;
 
     Crime() {
         this(UUID.randomUUID());
@@ -79,5 +80,13 @@ public class Crime {
 
     public void setSuspect(String mSuspect) {
         this.mSuspect = mSuspect;
+    }
+
+    String getPhoneNumber() {
+        return mPhoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        mPhoneNumber = phoneNumber;
     }
 }

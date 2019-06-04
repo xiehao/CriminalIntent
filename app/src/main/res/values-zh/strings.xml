@@ -28,4 +28,6 @@
     <string name="crime_report_unsolved">案件尚未侦破</string>
     <string name="crime_suspect">选择嫌疑人</string>
     <string name="send_report">通过下述渠道发送陋习报告</string>
+    <string name="crime_call_suspect">呼叫%1$s</string>
+    <string name="suspect">嫌疑人</string>
 </resources>

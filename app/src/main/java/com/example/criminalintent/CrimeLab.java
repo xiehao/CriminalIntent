@@ -98,6 +98,7 @@ class CrimeLab {
         values.put(Columns.SOLVED, crime.isSolved() ? 1 : 0);
         values.put(Columns.POLICE_REQUIRED, crime.isPoliceRequired() ? 1 : 0);
         values.put(Columns.SUSPECT, crime.getSuspect());
+        values.put(Columns.PHONE, crime.getPhoneNumber());
         return values;
     }
 
