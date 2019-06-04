@@ -89,4 +89,8 @@ public class Crime {
     public void setPhoneNumber(String phoneNumber) {
         mPhoneNumber = phoneNumber;
     }
+
+    String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
 }

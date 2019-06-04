@@ -30,4 +30,6 @@
     <string name="send_report">通过下述渠道发送陋习报告</string>
     <string name="crime_call_suspect">呼叫%1$s</string>
     <string name="suspect">嫌疑人</string>
+    <string name="crime_camera_description">拍一张陋习照片</string>
+    <string name="crime_photo_description">一张陋习照片</string>
 </resources>
